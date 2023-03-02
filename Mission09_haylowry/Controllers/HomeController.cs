@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mission09_haylowry.Models;
+using Mission09_haylowry.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +10,33 @@ namespace Mission09_haylowry.Controllers
 {
     public class HomeController : Controller
     {
-        private BookstoreContext Context { get; set; }
-        public HomeController (BookstoreContext temp)
+        private IBookstoreRepository Repo { get; set; }
+        public HomeController (IBookstoreRepository temp)
         {
-            Context = temp;
+            Repo = temp;
         }
-        public IActionResult Index()
+        public IActionResult Index(int pageNum = 1)
         {
-            var books = Context.Books.ToList();
-            return View(books);
+            int pageSize = 10;
+
+            var models = new BooksViewModel
+            {
+                Books = Repo.Books
+                .OrderBy(x => x.Title)
+                .Skip((pageNum - 1) * pageSize)
+                .Take(pageSize),
+
+                PageInfo = new PageInfo
+                {
+                    TotalNumBooks = Repo.Books.Count(),
+                    BooksPerPage = pageSize,
+                    CurrentPage = pageNum
+                }
+
+            };
+ 
+
+            return View(models);
         }
 
     }

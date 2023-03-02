@@ -1,21 +1,30 @@
 ﻿@{
 }
 
-@model List<Book>
+@model BooksViewModel
 
-<h1>Hello</h1>
+@foreach (Book x in Model.Books)
+{
 
-@foreach (Book x in Model)
-            {
-                <h3>@x.Title</h3>
-                <ul>
-                    <li>Author: @x.Author</li>
-                    <li>Publisher: @x.Publisher</li>
-                    <li>ISBN: @x.Isbn</li>
-                    <li>Classification: @x.Classification</li>
-                    <li>Category: @x.Category</li>
-                    <li>PageCount: @x.PageCount</li>
-                    <li>Price: $@x.Price</li>
-                </ul>
-                <br />
-            }
+<div class="card card-outline-primary m-1 p-1">
+    <div class="bg-faded p-1">
+        <h4>
+            @x.Title
+            <span class="badge badge-pill badge-primary" style="float:right">
+                <small>@x.Price.ToString("c")</small>
+            </span>
+        </h4>
+    </div>
+    <div class="card-text p-1"><b>Author: </b>@x.Author</div>
+    <div class="card-text p-1"><b>Publisher: </b>@x.Publisher</div>
+    <div class="card-text p-1"><b>ISBN: </b>@x.Isbn</div>
+    <div class="card-text p-1"><b>Classification: </b>@x.Classification</div>
+    <div class="card-text p-1"><b>Category: </b>@x.Category</div>
+    <div class="card-text p-1"><b>PageCount: </b>@x.PageCount</div>
+</div>
+}
+
+<div pagination="@Model.PageInfo" page-action="Index" page-classes-enabled="true"
+     page-class="btn" page-class-normal="btn-outline-dark"
+     page-class-selected="btn-primary" class="btn-group pull-right m-1">
+</div>
